@@ -51,7 +51,10 @@ const config: Config = {
           900: '#6a3252',
         },
         bluebarry: '#07061D',
-        background: '#030712',
+        background: {
+          600: '#151A2A',
+          900: '#030712',
+        },
         pistacho: '#D3FFCC',
         cream: '#E2DFCD',
         foam: '#D7DAE2',
