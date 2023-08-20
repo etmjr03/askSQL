@@ -52,6 +52,7 @@ const config: Config = {
         },
         bluebarry: '#07061D',
         background: {
+          300: '#323842',
           600: '#151A2A',
           900: '#030712',
         },
