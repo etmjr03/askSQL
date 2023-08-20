@@ -15,3 +15,6 @@ npm run dev
 - npm i prismjs
 - "Instalando o prisma para a tipagem correta do projeto, typescript"
 - npm i @types/prismjs -D
+
+* instalando os pacotes da open IA:
+- npm install ai openai-edge

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { Trash2, Stars } from 'lucide-react';
-import Editor from 'react-simple-code-editor';
+import { useState } from 'react'
+import { Trash2, Stars } from 'lucide-react'
+import Editor from 'react-simple-code-editor'
+import { useCompletion } from 'ai/react'
 
 import { highlight, languages } from 'prismjs';
 
@@ -10,9 +11,16 @@ import 'prismjs/components/prism-sql';
 import 'prismjs/themes/prism-dark.css';
 
 export default function Home() {
-  const [code, setCode] = useState('');
-  const [question, setQuestion] = useState('');
-  const result = '';
+  const [schema, setSchema] = useState('');
+
+  const { completion, handleSubmit, input, handleInputChange } = useCompletion({
+    api: '/api/generate-sql',
+    body: {
+      schema,
+    },
+  })
+
+  const result = completion
 
   return (
     <div className="max-w-[438px] mx-auto px-4 pt-12 pb-4">
@@ -32,49 +40,52 @@ export default function Home() {
         </button>
       </header>
 
-      <form action="" className="py-8 w-full flex flex-col text-foam">
+      <form onSubmit={handleSubmit} className="py-8 w-full flex flex-col text-foam">
         <label className="text-lg font-light" htmlFor="schema">
           Cole seu código SQL aqui:
         </label>
         <Editor
           textareaId="schema"
-          value={code}
-          onValueChange={code => setCode(code)}
+          value={schema}
+          onValueChange={code => setSchema(code)}
           highlight={code => highlight(code, languages.sql, 'sql')}
           padding={16}
           textareaClassName="outline-none"
           className="my-4 h-40 font-mono bg-background-600 border border-background-300 rounded-md focus-within:ring-1 focus-within:ring-lime-600" 
         />
 
-        <label className="text-lg font-light" htmlFor="question">Faça uma pergunta sobre o código:</label>
+        <label className="text-lg font-light" htmlFor="question">Faça uma pergunta sobre o SQL:</label>
         <textarea 
-        className="my-4 bg-background-600 border border-background-300 rounded-md outline-none focus:ring-1 focus:ring-lime-600" 
+        className="my-4 px-4 py-4 bg-background-600 border border-background-300 rounded-md outline-none focus:ring-1 focus:ring-lime-600" 
         name="question" 
         id="question"
-        value={question}
-        onChange={e => setQuestion(e.target.value)}
+        value={input}
+        onChange={handleInputChange}
         />
 
-        <button type="submit" className="text-pistacho flex items-center justify-center rounded-lg border border-pistacho h-14 gap-2">
+        <button type="submit" className="text-pistacho flex items-center justify-center rounded-lg border border-pistacho h-14 gap-2 hover:bg-lime-900">
           <Stars className="w-6 h-6"/>
           Perguntar à inteligência artificial
         </button>
       </form>
 
       <div className="mt-6">
-      <span className="text-lg font-light text-foam">Resposta:</span>
+        <span className="text-lg font-light text-foam">Resposta:</span>
         <textarea 
-        readOnly
-        className="my-4 w-full bg-transparent border border-background-300 rounded-md outline-none focus:ring-1 focus:ring-lime-600"
-         />
-        <Editor
+          className="my-4 w-full h-40 px-4 py-4 text-foam font-mono bg-background-600 border border-background-300 rounded-md outline-none focus:ring-1 focus:ring-lime-600" 
+          name="question" 
+          id="question"
+          value={result}
+        />
+        {/* <Editor
+          readOnly
           value={result}
           onValueChange={() => {}}
           highlight={code => highlight(code, languages.sql, 'sql')}
           padding={16}
           textareaClassName="outline-none"
           className="my-4 w-full bg-transparent border border-background-300 rounded-md" 
-        />
+        /> */}
       </div>
     </div>
   )
